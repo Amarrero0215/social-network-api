@@ -1,6 +1,6 @@
-import User from './User.js';
-import Thought from './Thought.js';
-import ReactionSchema from './Reaction.js'
+import User from './User';
+import Thought from './Thought';
+import ReactionSchema from './Reaction'
 
 
 export { User, Thought, ReactionSchema };

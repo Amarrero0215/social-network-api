@@ -1,6 +1,6 @@
 import { Schema, model, type Document } from 'mongoose';
-import { dateFormat } from '../utils/dateFormat.js';
-import reactionSchema from './Reaction.js'
+import { dateFormat } from '../utils/dateFormat';
+import reactionSchema from './Reaction'
 
 interface IThought extends Document {
   thoughtText: string,
@@ -41,6 +41,6 @@ thoughtSchema.virtual('reactionCount').get(function() {
  return this.reactions.length;
 });
 
-const Thought = model('Thought', thoughtSchema);
+const Thought = model<IThought>('Thought', thoughtSchema);
 
 export default Thought;

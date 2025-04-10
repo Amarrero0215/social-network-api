@@ -1,11 +1,13 @@
 import { Request, Response } from 'express';
-import { User, Thought } from '../models/index.js';
+import { User, Thought } from '../models/index';
+import { handleNotFound } from '../utils/responses';
 
  // get all users
  export const getUsers = async(_req: Request, res: Response) => {
    try {
      const dbUserData = await User.find()
        .select('-__v')
+       .lean();
 
      return res.json(dbUserData);
    } catch (err) {
@@ -21,9 +23,7 @@ import { User, Thought } from '../models/index.js';
        .populate('friends')
        .populate('thoughts');
 
-     if (!dbUserData) {
-       return res.status(404).json({ message: 'No user with this id!' });
-     }
+       if (!dbUserData) return handleNotFound(res, 'User');
 
      return res.json(dbUserData);
    } catch (err) {
@@ -55,9 +55,7 @@ import { User, Thought } from '../models/index.js';
        }
      );
 
-     if (!dbUserData) {
-       return res.status(404).json({ message: 'No user with this id!' });
-     }
+     if (!dbUserData) return handleNotFound(res, 'User');
 
      return res.json(dbUserData);
    } catch (err) {
@@ -70,9 +68,7 @@ import { User, Thought } from '../models/index.js';
    try {
      const dbUserData = await User.findOneAndDelete({ _id: req.params.userId })
 
-     if (!dbUserData) {
-       return res.status(404).json({ message: 'No user with this id!' });
-     }
+     if (!dbUserData) return handleNotFound(res, 'User');
 
      // BONUS: get ids of user's `thoughts` and delete them all
      await Thought.deleteMany({ _id: { $in: dbUserData.thoughts } });
@@ -88,9 +84,7 @@ import { User, Thought } from '../models/index.js';
    try {
      const dbUserData = await User.findOneAndUpdate({ _id: req.params.userId }, { $addToSet: { friends: req.params.friendId } }, { new: true });
 
-     if (!dbUserData) {
-       return res.status(404).json({ message: 'No user with this id!' });
-     }
+     if (!dbUserData) return handleNotFound(res, 'User');
 
      return res.json(dbUserData);
    } catch (err) {
@@ -103,9 +97,7 @@ import { User, Thought } from '../models/index.js';
    try {
      const dbUserData = await User.findOneAndUpdate({ _id: req.params.userId }, { $pull: { friends: req.params.friendId } }, { new: true });
 
-     if (!dbUserData) {
-       return res.status(404).json({ message: 'No user with this id!' });
-     }
+     if (!dbUserData) return handleNotFound(res, 'User');
 
      return res.json(dbUserData);
    } catch (err) {

@@ -1,5 +1,5 @@
 import { Schema, Types, type Document } from 'mongoose';
-import { dateFormat } from '../utils/dateFormat.js';
+import { dateFormat } from '../utils/dateFormat';
 
 interface IReaction extends Document {
  reactionId: Schema.Types.ObjectId,
@@ -33,7 +33,6 @@ const reactionSchema = new Schema<IReaction>(
    toJSON: {
      getters: true
    },
-   timestamps: true,
    id: false
  }
 );

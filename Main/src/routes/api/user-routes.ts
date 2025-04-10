@@ -1,4 +1,5 @@
 import { Router } from 'express';
+
 const router = Router();
 
 import {
@@ -9,7 +10,7 @@ import {
   deleteUser,
   addFriend,
   removeFriend,
-} from '../../controllers/user-controller.js';
+} from '../../controllers/user-controller';
 
 // /api/users
 router.route('/').get(getUsers).post(createUser);
