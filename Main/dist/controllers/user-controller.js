@@ -1,9 +1,11 @@
 import { User, Thought } from '../models/index.js';
+import { handleNotFound } from '../utils/responses.js';
 // get all users
 export const getUsers = async (_req, res) => {
     try {
         const dbUserData = await User.find()
-            .select('-__v');
+            .select('-__v')
+            .lean();
         return res.json(dbUserData);
     }
     catch (err) {
@@ -18,9 +20,8 @@ export const getSingleUser = async (req, res) => {
             .select('-__v')
             .populate('friends')
             .populate('thoughts');
-        if (!dbUserData) {
-            return res.status(404).json({ message: 'No user with this id!' });
-        }
+        if (!dbUserData)
+            return handleNotFound(res, 'User');
         return res.json(dbUserData);
     }
     catch (err) {
@@ -48,9 +49,8 @@ export const updateUser = async (req, res) => {
             runValidators: true,
             new: true,
         });
-        if (!dbUserData) {
-            return res.status(404).json({ message: 'No user with this id!' });
-        }
+        if (!dbUserData)
+            return handleNotFound(res, 'User');
         return res.json(dbUserData);
     }
     catch (err) {
@@ -62,9 +62,8 @@ export const updateUser = async (req, res) => {
 export const deleteUser = async (req, res) => {
     try {
         const dbUserData = await User.findOneAndDelete({ _id: req.params.userId });
-        if (!dbUserData) {
-            return res.status(404).json({ message: 'No user with this id!' });
-        }
+        if (!dbUserData)
+            return handleNotFound(res, 'User');
         // BONUS: get ids of user's `thoughts` and delete them all
         await Thought.deleteMany({ _id: { $in: dbUserData.thoughts } });
         return res.json({ message: 'User and associated thoughts deleted!' });
@@ -78,9 +77,8 @@ export const deleteUser = async (req, res) => {
 export const addFriend = async (req, res) => {
     try {
         const dbUserData = await User.findOneAndUpdate({ _id: req.params.userId }, { $addToSet: { friends: req.params.friendId } }, { new: true });
-        if (!dbUserData) {
-            return res.status(404).json({ message: 'No user with this id!' });
-        }
+        if (!dbUserData)
+            return handleNotFound(res, 'User');
         return res.json(dbUserData);
     }
     catch (err) {
@@ -92,9 +90,8 @@ export const addFriend = async (req, res) => {
 export const removeFriend = async (req, res) => {
     try {
         const dbUserData = await User.findOneAndUpdate({ _id: req.params.userId }, { $pull: { friends: req.params.friendId } }, { new: true });
-        if (!dbUserData) {
-            return res.status(404).json({ message: 'No user with this id!' });
-        }
+        if (!dbUserData)
+            return handleNotFound(res, 'User');
         return res.json(dbUserData);
     }
     catch (err) {

@@ -1,9 +1,11 @@
 import { Thought, User } from '../models/index.js';
+import { handleNotFound, handleRelationNotFound } from '../utils/responses.js';
 // get all thoughts
 export const getThoughts = async (_req, res) => {
     try {
         const dbThoughtData = await Thought.find()
-            .sort({ createdAt: -1 });
+            .sort({ createdAt: -1 })
+            .lean();
         return res.json(dbThoughtData);
     }
     catch (err) {
@@ -15,9 +17,8 @@ export const getThoughts = async (_req, res) => {
 export const getSingleThought = async (req, res) => {
     try {
         const dbThoughtData = await Thought.findOne({ _id: req.params.thoughtId });
-        if (!dbThoughtData) {
-            return res.status(404).json({ message: 'No thought with this id!' });
-        }
+        if (!dbThoughtData)
+            return handleNotFound(res, 'Thought');
         return res.json(dbThoughtData);
     }
     catch (err) {
@@ -30,10 +31,12 @@ export const createThought = async (req, res) => {
     try {
         const dbThoughtData = await Thought.create(req.body);
         const dbUserData = await User.findOneAndUpdate({ _id: req.body.userId }, { $push: { thoughts: dbThoughtData._id } }, { new: true });
-        if (!dbUserData) {
-            return res.status(404).json({ message: 'Thought created but no user with this id!' });
-        }
-        return res.json({ message: 'Thought successfully created!' });
+        if (!dbUserData)
+            return handleRelationNotFound(res, 'Thought', 'User');
+        return res.json({
+            message: 'Thought successfully created!',
+            thoughtId: dbThoughtData._id
+        });
     }
     catch (err) {
         console.log(err);
@@ -44,9 +47,8 @@ export const createThought = async (req, res) => {
 export const updateThought = async (req, res) => {
     try {
         const dbThoughtData = await Thought.findOneAndUpdate({ _id: req.params.thoughtId }, { $set: req.body }, { runValidators: true, new: true });
-        if (!dbThoughtData) {
-            return res.status(404).json({ message: 'No thought with this id!' });
-        }
+        if (!dbThoughtData)
+            return handleNotFound(res, 'Thought');
         return res.json(dbThoughtData);
     }
     catch (err) {
@@ -58,14 +60,12 @@ export const updateThought = async (req, res) => {
 export const deleteThought = async (req, res) => {
     try {
         const dbThoughtData = await Thought.findOneAndDelete({ _id: req.params.thoughtId });
-        if (!dbThoughtData) {
-            return res.status(404).json({ message: 'No thought with this id!' });
-        }
+        if (!dbThoughtData)
+            return handleNotFound(res, 'Thought');
         // remove thought id from user's `thoughts` field
-        const dbUserData = User.findOneAndUpdate({ thoughts: req.params.thoughtId }, { $pull: { thoughts: req.params.thoughtId } }, { new: true });
-        if (!dbUserData) {
-            return res.status(404).json({ message: 'Thought created but no user with this id!' });
-        }
+        const dbUserData = await User.findOneAndUpdate({ thoughts: req.params.thoughtId }, { $pull: { thoughts: req.params.thoughtId } }, { new: true });
+        if (!dbUserData)
+            return handleRelationNotFound(res, 'Thought', 'User');
         return res.json({ message: 'Thought successfully deleted!' });
     }
     catch (err) {
@@ -77,9 +77,8 @@ export const deleteThought = async (req, res) => {
 export const addReaction = async (req, res) => {
     try {
         const dbThoughtData = await Thought.findOneAndUpdate({ _id: req.params.thoughtId }, { $addToSet: { reactions: req.body } }, { runValidators: true, new: true });
-        if (!dbThoughtData) {
-            return res.status(404).json({ message: 'No thought with this id!' });
-        }
+        if (!dbThoughtData)
+            return handleNotFound(res, 'Thought');
         return res.json(dbThoughtData);
     }
     catch (err) {
@@ -91,9 +90,8 @@ export const addReaction = async (req, res) => {
 export const removeReaction = async (req, res) => {
     try {
         const dbThoughtData = await Thought.findOneAndUpdate({ _id: req.params.thoughtId }, { $pull: { reactions: { reactionId: req.params.reactionId } } }, { runValidators: true, new: true });
-        if (!dbThoughtData) {
-            return res.status(404).json({ message: 'No thought with this id!' });
-        }
+        if (!dbThoughtData)
+            return handleNotFound(res, 'Thought');
         return res.json(dbThoughtData);
     }
     catch (err) {

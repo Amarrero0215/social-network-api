@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { User, Thought } from '../models/index';
-import { handleNotFound } from '../utils/responses';
+import { User, Thought } from '../models/index.js';
+import { handleNotFound } from '../utils/responses.js';
 
  // get all users
  export const getUsers = async(_req: Request, res: Response) => {

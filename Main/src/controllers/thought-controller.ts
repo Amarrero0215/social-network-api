@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { Thought, User } from '../models/index';
-import { handleNotFound, handleRelationNotFound } from '../utils/responses';
+import { Thought, User } from '../models/index.js';
+import { handleNotFound, handleRelationNotFound } from '../utils/responses.js';
 
 // get all thoughts
 export const getThoughts = async (_req: Request, res: Response) => {
@@ -41,7 +41,10 @@ export const getSingleThought = async (req: Request, res: Response) => {
 
       if (!dbUserData) return handleRelationNotFound(res, 'Thought', 'User');
 
-      return res.json({ message: 'Thought successfully created!' });
+      return res.json({
+        message: 'Thought successfully created!',
+        thoughtId: dbThoughtData._id
+      });
     } catch (err) {
       console.log(err);
       return res.status(500).json(err);

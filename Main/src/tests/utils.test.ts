@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { handleNotFound, handleRelationNotFound } from '../utils/responses';
-import { addDateSuffix, dateFormat } from '../utils/dateFormat';
+import { handleNotFound, handleRelationNotFound } from '../utils/responses.js';
+import { addDateSuffix, dateFormat } from '../utils/dateFormat.js';
 
 const mockResponse = () => {
   const res: any = {};

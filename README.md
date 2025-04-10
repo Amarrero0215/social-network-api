@@ -31,7 +31,7 @@ A full-stack backend API for a social network app where users can post thoughts,
 
 3. Create a `.env` file in the root and add:
    ```
-   MONGODB_URI=mongodb://127.0.0.1:27017/socialmedia
+   MONGODB_URI=mongodb+srv://<db_username>:<db_password>@socialnetworkcluster.xpi86ne.mongodb.net/socialmedia?retryWrites=true&w=majority&appName=socialNetworkCluster
    ```
 
 4. Build the project:

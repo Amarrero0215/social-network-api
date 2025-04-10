@@ -10,7 +10,7 @@ import {
   deleteUser,
   addFriend,
   removeFriend,
-} from '../../controllers/user-controller';
+} from '../../controllers/user-controller.js';
 
 // /api/users
 router.route('/').get(getUsers).post(createUser);

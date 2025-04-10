@@ -23,7 +23,6 @@ const reactionSchema = new Schema({
     toJSON: {
         getters: true
     },
-    timestamps: true,
     id: false
 });
 export default reactionSchema;
