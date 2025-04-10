@@ -20,7 +20,7 @@ A full-stack backend API for a social network app where users can post thoughts,
 
 1. Clone the repo:
    ```bash
-   git clone https://github.com/YOUR_USERNAME/social-network-api.git
+   git clone https://github.com/Amarrero0215/social-network-api.git
    cd social-network-api
    ```
 
@@ -105,7 +105,8 @@ Once the server is running, test the API using **Insomnia** or **Postman**.
 
 ## 🎥 Walkthrough Video
 
-> 📹 **COMING SOON**  
+> 📹 **Walkthrough Recording:**
+> [Video Walkthrough](./Assets/videos/Challenge17Video.mp4)  
 > A full walkthrough using Insomnia will be included here.
 
 ---
