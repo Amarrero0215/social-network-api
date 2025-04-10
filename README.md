@@ -106,7 +106,7 @@ Once the server is running, test the API using **Insomnia** or **Postman**.
 ## 🎥 Walkthrough Video
 
 > 📹 **Walkthrough Recording:**
-> [Video Walkthrough](./Assets/videos/Challenge17Video.mp4)  
+> [Video Walkthrough](./Assets/videos/Challenge17Video-below50mb.mp4)  
 > A full walkthrough using Insomnia will be included here.
 
 ---
